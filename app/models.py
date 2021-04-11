@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 STATUS = (
     (1, 'SUCCESS'),
     (0, 'FAILURE'),
@@ -8,9 +8,11 @@ STATUS = (
 class ImportDetails(models.Model):
     """
     Details about the import and its status
+    Not adding as foreign key to ImportDate as in case of failed imports - it doesn't make sense
     """
     imported_date = models.DateField(auto_now= True)
     status = models.IntegerField(choices= STATUS, default= 0)
+
 class ImportDate(models.Model):
     """
     Data about equity added to this db
@@ -23,4 +25,4 @@ class ImportDate(models.Model):
     high_value = models.IntegerField()
     low_value = models.IntegerField()
     close_value = models.IntegerField()
-    import_details = models.ForeignKey(ImportDetails,on_delete= models.CASCADE)
+    imported_date = models.DateField(default= timezone.now)
