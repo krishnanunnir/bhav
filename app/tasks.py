@@ -7,7 +7,7 @@ from io import BytesIO
 from io import TextIOWrapper
 from .models import ImportDate, ImportDetails
 from celery import Celery
-from celery import shared_task, states
+from celery import shared_task
 logger = logging.getLogger(__name__)
 
 def getCSVContentForDate(date_of_access):
@@ -25,11 +25,8 @@ def getCSVContentForDate(date_of_access):
     return list(csv.DictReader(TextIOWrapper(zipfile_data_file, 'utf-8')))
 
 
-@shared_task(bind=True,
-             name='writeCSVToDB',
-             max_retries=3,
-             soft_time_limit=20)
-def writeCSVToDB(self):
+@shared_task
+def writeCSVToDB():
     today = datetime.date.today()
     # Checking if the process has been completed successfully for a date
     import_detail, created = ImportDetails.objects.get_or_create(
@@ -49,12 +46,10 @@ def writeCSVToDB(self):
                     high_value = float(row['HIGH']),
                     low_value = float(row['LOW']),
                     close_value = float(row['CLOSE']),
-                    imported_date = today
+                    imported_details = import_detail
                 )
             import_detail.status = 1
             import_detail.save()
             logger.info(f'Successfully updated {len(dict_equity)} records in the db for {today}')
         except Exception as ex:
             logger.error(f"Issue occured while retrierving the bhavcopy for  {today} :: {str(ex)}")
-
-writeCSVToDB()
