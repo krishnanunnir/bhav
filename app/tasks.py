@@ -5,9 +5,9 @@ import datetime
 from zipfile import ZipFile
 from io import BytesIO
 from io import TextIOWrapper
-from app.models import ImportDate, ImportDetails
+from .models import ImportDate, ImportDetails
 from celery import Celery
-from celery.schedules import crontab
+from celery import shared_task, states
 logger = logging.getLogger(__name__)
 
 def getCSVContentForDate(date_of_access):
@@ -24,7 +24,12 @@ def getCSVContentForDate(date_of_access):
     # decided to go with csv over pandas - 1. need not add a dependancy 2. csv is more light weight 3. small dataset
     return list(csv.DictReader(TextIOWrapper(zipfile_data_file, 'utf-8')))
 
-def writeCSVToDB():
+
+@shared_task(bind=True,
+             name='writeCSVToDB',
+             max_retries=3,
+             soft_time_limit=20)
+def writeCSVToDB(self):
     today = datetime.date.today()
     # Checking if the process has been completed successfully for a date
     import_detail, created = ImportDetails.objects.get_or_create(
@@ -50,7 +55,6 @@ def writeCSVToDB():
             import_detail.save()
             logger.info(f'Successfully updated {len(dict_equity)} records in the db for {today}')
         except Exception as ex:
-            status = 0
             logger.error(f"Issue occured while retrierving the bhavcopy for  {today} :: {str(ex)}")
 
 writeCSVToDB()
