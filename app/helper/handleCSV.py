@@ -18,7 +18,7 @@ def getCSVContentForDate(dateOfAccess):
     # writes are expensive, so just going to access directly
     zipfileData = ZipFile(BytesIO(response.content),'r')
     fileVal = zipfileData.open(f"{fileNameZip}.CSV")
-    return list(csv.reader(TextIOWrapper(fileVal, 'utf-8')))[0]
+    return list(csv.reader(TextIOWrapper(fileVal, 'utf-8')))
 
 dateOfAccess = datetime.datetime(2020, 4, 17)
 print(getCSVContentForDate(dateOfAccess))
