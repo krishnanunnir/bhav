@@ -18,11 +18,12 @@ var app = new Vue({
     created:async function () {
         // delays call to api so as to reduce the number of api call - provided by lodash
         this.debouncedgetStock = _.debounce(this.getStock, 500);
+        this.getStock('')
     },
     methods:{
           getStock: async function(stock){
             // if not an empty string we return the searched for value
-            if(stock && stock.match(/^[A-Za-z0-9]+\s*$/)){
+            if(stock){
                 url = "http://127.0.0.1:8000/api/"+stock;
             }else{
                 url = "http://127.0.0.1:8000/api/stonks";

@@ -4,15 +4,35 @@
 {% block headers %}
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<link rel='stylesheet' href="{% static 'css/table.css' %}">
 {% endblock %}
 {% block content %}
 <div id="app">
+    <br>
     <input type="text" id="search" v-model="stockname">
     <br>
     <div id="result">
-        test + ${ message }
+        <table class="rwd-table" v-if="message.length">
+            <tr>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Open</th>
+              <th>Close</th>
+              <th>High</th>
+              <th>Low</th>
+            </tr>
+            <tr v-for="mess in message">
+              <td data-th="Code">${ mess.code }</td>
+              <td data-th="Name">${ mess.name }</td>
+              <td data-th="Open">${ mess.name }</td>
+              <td data-th="Close">${ mess.name }</td>
+              <td data-th="High">${ mess.high_value }</td>
+              <td data-th="Low">${ mess.low_value }</td>
+            </tr>
+        </table>
+        <span v-else>Couldn't find anything matching it</span>
+
     </div>
 </div>
-  
 <script src="{% static 'js/script.js' %}"></script>
 {% endblock %}
