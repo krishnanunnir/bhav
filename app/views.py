@@ -16,7 +16,7 @@ def stock_list(request):
     if request.method=="GET":
         paginator = PageNumberPagination()
         paginator.page_size = 50
-        importDateObj = ImportDate.objects.all()
+        importDateObj = ImportDate.objects.all().order_by("-id")
         result_page = paginator.paginate_queryset(importDateObj, request)
         serializer = ImportDateSerializer(result_page,many= True)
         return JsonResponse(serializer.data,safe= False)
@@ -34,3 +34,6 @@ def stock_list_by_name(request, stockname):
         result_page = paginator.paginate_queryset(importDateObj, request)
         serializer = ImportDateSerializer(result_page,many= True)
         return JsonResponse(serializer.data,safe= False)
+
+def render_stock(request, template = "index.html"):
+    return render(request, template)

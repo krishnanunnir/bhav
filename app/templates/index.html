@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} api v1 {% endblock %}
+{% block headers %}
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+{% endblock %}
+{% block content %}
+<div id="app">
+    <input type="text" id="search" v-model="stockname">
+    <br>
+    <div id="result">
+        test + ${ message }
+    </div>
+</div>
+  
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}
