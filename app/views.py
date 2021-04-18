@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .serializers import ImportDateSerializer
 from django.views.decorators.csrf import csrf_exempt
 from .models import ImportDate
+import datetime
+import csv
 from django.http import HttpResponse, JsonResponse
 # Create your views here.
 
@@ -26,5 +28,21 @@ def stock_list_by_name(request, stockname):
         serializer = ImportDateSerializer(importDateObj,many= True)
         return JsonResponse(serializer.data,safe= False)
 
+def get_as_zip(request, stockname=""):
+    # Create the HttpResponse object with the appropriate CSV header.
+    importDateObj = ImportDate.objects.filter(name__icontains=stockname).order_by("-id")
+    date_of_access_string = datetime.date.today().strftime("%d%m%y")
+    if stockname:
+        file_name_zip = f'EQ{date_of_access_string}_{stockname}.zip'
+    else:
+        file_name_zip = f'EQ{date_of_access_string}.zip'
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{file_name_zip}.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Code', 'Name', 'Open','Close','Low', 'High'])
+    for  obj in importDateObj:
+        print(obj)
+        writer.writerow([obj.code,obj.name,obj.open_value,obj.close_value,obj.low_value,obj.high_value])
+    return response
 def render_stock(request, template = "index.html"):
     return render(request, template)

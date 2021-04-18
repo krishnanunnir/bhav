@@ -10,6 +10,7 @@
 <div id="app">
     <br>
     <input type="text" id="search" v-model="stockname">
+    <a href="api/downloads/" id="downloadhref">Download as Zip</a>
     <br>
     <div id="result">
         <table class="rwd-table" v-if="message.length">
@@ -30,7 +31,7 @@
               <td data-th="Low">${ mess.low_value }</td>
             </tr>
         </table>
-        <span v-else>Couldn't find anything matching it</span>
+        <div v-else>Couldn't find anything matching it</span>
 
     </div>
 </div>

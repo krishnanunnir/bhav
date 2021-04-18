@@ -25,9 +25,12 @@ var app = new Vue({
             // if not an empty string we return the searched for value
             if(stock){
                 url = "http://127.0.0.1:8000/api/"+stock;
+                downloadUrl = "/api/downloads/"+stock;
             }else{
                 url = "http://127.0.0.1:8000/api/stonks";
+                downloadUrl = "/api/downloads/";
             }
+            document.getElementById("downloadhref").href = downloadUrl;
             const response = await fetch(url);
             console.log(response);
             this.message = await response.json();
