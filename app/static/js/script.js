@@ -11,7 +11,6 @@ var app = new Vue({
     },
     watch: {
         stockname: function (oldname, newname) {
-            console.log(oldname);
             this.debouncedgetStock(oldname);
         }
     },
@@ -32,7 +31,6 @@ var app = new Vue({
             }
             document.getElementById("downloadhref").href = downloadUrl;
             const response = await fetch(url);
-            console.log(response);
             this.message = await response.json();
           }
       }
