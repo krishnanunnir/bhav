@@ -9,8 +9,12 @@ from .models import ImportDate, ImportDetails
 from celery import Celery
 from celery import shared_task
 logger = logging.getLogger(__name__)
+from django.core.cache import cache
 
 def getCSVContentForDate(date_of_access):
+    """
+    returns the content of csv file provided the current date
+    """
     # x = datetime.datetime.now()
     date_of_access_string = date_of_access.strftime("%d%m%y")
     file_name_zip = f'EQ{date_of_access_string}'
@@ -27,13 +31,14 @@ def getCSVContentForDate(date_of_access):
 
 @shared_task
 def writeCSVToDB():
+    """
+    Imports the data from csv to database
+    Not used as of now.
+    """
     today = datetime.date.today()
-    # Checking if the process has been completed successfully for a date
     import_detail, created = ImportDetails.objects.get_or_create(
         imported_date= today
     )
-    print(created)
-    print(import_detail.status)
     if created or import_detail.status == 0:
         try:
             dict_equity = getCSVContentForDate(today)
@@ -53,3 +58,18 @@ def writeCSVToDB():
             logger.info(f'Successfully updated {len(dict_equity)} records in the db for {today}')
         except Exception as ex:
             logger.error(f"Issue occured while retrierving the bhavcopy for  {today} :: {str(ex)}")
+@shared_task
+def writeCSVToCache(today = datetime.date.today()):
+    """
+    Imports the data from csv to Cache
+    """
+    try:
+        dict_equity = {
+            "date": today,
+            "data": getCSVContentForDate(today)
+        }
+        logger.info(f"Successfuly retrived bhavcopy for {today}")
+        cache.set("latest", dict_equity)
+        logger.info(f'Successfully updated {len(dict_equity)} records in the db for {today}')
+    except Exception as ex:
+        logger.error(f"Issue occured while retrierving the bhavcopy for  {today} :: {str(ex)}")
