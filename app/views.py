@@ -32,7 +32,7 @@ def stock_list_by_name(request, stockname):
     """
     if request.method=="GET":
         search_result = []
-        search_key = cache.keys("*"+stockname+"*")
+        search_key = cache.keys("*"+stockname.lower() +"*")
         for key in search_key:
             search_result+=[cache.get(key)]
         return JsonResponse(search_result,safe= False)
@@ -40,7 +40,7 @@ def stock_list_by_name(request, stockname):
 def get_as_zip(request, stockname=""):
     # Create the HttpResponse object with the appropriate CSV header.
     search_result = []
-    search_key = cache.keys("*"+stockname+"*")
+    search_key = cache.keys("*"+stockname.lower()+"*")
     date_of_access_string = datetime.date.today().strftime("%d%m%y")
     if stockname:
         file_name_zip = f'EQ{date_of_access_string}_{stockname}.zip'
