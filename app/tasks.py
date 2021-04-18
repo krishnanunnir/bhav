@@ -64,12 +64,19 @@ def writeCSVToCache(today = datetime.date.today()):
     Imports the data from csv to Cache
     """
     try:
-        dict_equity = {
-            "date": today,
-            "data": getCSVContentForDate(today)
-        }
+        dict_equity = getCSVContentForDate(today)
         logger.info(f"Successfuly retrived bhavcopy for {today}")
-        cache.set("latest", dict_equity)
+        for row in dict_equity:
+            data = {
+                "code": row['SC_CODE'],
+                "name": row['SC_NAME'],
+                "open_value": float(row['OPEN']),
+                "high_value": float(row['HIGH']),
+                "low_value": float(row['LOW']),
+                "close_value": float(row['CLOSE']),
+            }
+            cache.set(row['SC_NAME'].lower(),data)
+        logger.info(f"Successfuly retrived bhavcopy for {today}")
         logger.info(f'Successfully updated {len(dict_equity)} records in the db for {today}')
     except Exception as ex:
         logger.error(f"Issue occured while retrierving the bhavcopy for  {today} :: {str(ex)}")
