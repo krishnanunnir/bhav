@@ -4,36 +4,51 @@
 {% block headers %}
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 <link rel='stylesheet' href="{% static 'css/table.css' %}">
+<link rel='stylesheet' href="{% static 'css/index.css' %}">
 {% endblock %}
 {% block content %}
-<div id="app">
-    <br>
-    <input type="text" id="search" v-model="stockname">
-    <a href="api/downloads/" id="downloadhref">Download as Zip</a>
-    <br>
-    <div id="result">
-        <table class="rwd-table" v-if="message.length">
-            <tr>
-              <th>Code</th>
-              <th>Name</th>
-              <th>Open</th>
-              <th>Close</th>
-              <th>High</th>
-              <th>Low</th>
-            </tr>
-            <tr v-for="mess in message">
-              <td data-th="Code">${ mess.code }</td>
-              <td data-th="Name">${ mess.name }</td>
-              <td data-th="Open">${ mess.name }</td>
-              <td data-th="Close">${ mess.name }</td>
-              <td data-th="High">${ mess.high_value }</td>
-              <td data-th="Low">${ mess.low_value }</td>
-            </tr>
-        </table>
-        <div v-else>Couldn't find anything matching it</span>
-
+<div id="app" class="container">
+  <br>
+  <div class="columns is-centered">
+    <div class="column is-two-fifths">
+      <div class="control">
+        <input type="text" id="search" v-model="stockname" class="input" placeholder="Search...">
+      </div>
     </div>
+    <div class="column is-one-fifth is-right">
+      <a href="api/downloads/" id="downloadhref" class="button is-dark">Download as Zip</a>
+    </div>
+  </div>
+  <br>
+  <div class="columns is-centered">
+    <div class="column is-three-fifths">
+      <div id="result">
+        <table class="rwd-table" v-if="message.length">
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Open</th>
+            <th>Close</th>
+            <th>High</th>
+            <th>Low</th>
+          </tr>
+          <tr v-for="mess in message">
+            <td data-th="Code">${ mess.code }</td>
+            <td data-th="Name">${ mess.name }</td>
+            <td data-th="Open">${ mess.open_value }</td>
+            <td data-th="Close">${ mess.close_value }</td>
+            <td data-th="High">${ mess.high_value }</td>
+            <td data-th="Low">${ mess.low_value }</td>
+          </tr>
+        </table>
+        <div v-else>Couldn't find any matches</span>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <script src="{% static 'js/script.js' %}"></script>
 {% endblock %}
