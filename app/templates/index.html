@@ -5,7 +5,6 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-<script src="https://unpkg.com/vuejs-paginate@latest"></script>
 <link rel='stylesheet' href="{% static 'css/table.css' %}">
 <link rel='stylesheet' href="{% static 'css/index.css' %}">
 {% endblock %}
@@ -30,7 +29,7 @@
         <a class="pagination-next" v-on:click="page_number+=1" v-if="page_number!=total_page_count">Next page</a>
         <ul class="pagination-list">
           <li>
-            <a class="pagination-link is-current" aria-current="page" v-model="page_number">
+            <a class="pagination-link is-current" aria-current="page" >
               ${ page_number} / ${total_page_count}
             </a>
           </li>
