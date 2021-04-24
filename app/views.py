@@ -50,17 +50,17 @@ def stock_list_by_name(request, stockname):
         serializer = EquitySerializer(result_page,many= True)
         return paginator.get_paginated_response(serializer.data)
 
-def get_as_zip(request, stockname=""):
+def get_as_csv(request, stockname=""):
     # Create the HttpResponse object with the appropriate CSV header.
     search_result = []
     search_key = cache.keys("*"+stockname.lower()+"*")
     date_of_access_string = datetime.date.today().strftime("%d%m%y")
     if stockname:
-        file_name_zip = f'EQ{date_of_access_string}_{stockname}.zip'
+        file_name_csv = f'EQ{date_of_access_string}_{stockname}'
     else:
-        file_name_zip = f'EQ{date_of_access_string}.zip'
+        file_name_csv = f'EQ{date_of_access_string}'
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = f'attachment; filename="{file_name_zip}.csv"'
+    response['Content-Disposition'] = f'attachment; filename="{file_name_csv}.csv"'
     writer = csv.writer(response)
     writer.writerow(['Code', 'Name', 'Open','Close','Low', 'High'])
     for  key in search_key:
