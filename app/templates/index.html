@@ -5,6 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+<script src="https://unpkg.com/vuejs-paginate@latest"></script>
 <link rel='stylesheet' href="{% static 'css/table.css' %}">
 <link rel='stylesheet' href="{% static 'css/index.css' %}">
 {% endblock %}
@@ -22,6 +23,17 @@
     </div>
   </div>
   <br>
+  <div class="columns is-centered" v-if="message.length">
+    <div class="column is-three-fifths">
+      <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <a class="pagination-previous" v-on:click="temp_page_number-=1" v-if="page_number!=1">Previous</a>
+        <a class="pagination-next" v-on:click="temp_page_number+=1" v-if="page_number!=total_page_count">Next page</a>
+        <ul class="pagination-list">
+          <li><a class="pagination-link is-current" aria-current="page">${ page_number}</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
   <div class="columns is-centered">
     <div class="column is-three-fifths">
       <div id="result">
