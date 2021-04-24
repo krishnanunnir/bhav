@@ -1,7 +1,5 @@
 
-Vue.component('tablecompnent',{
-    template : '<div><h1>This is coming from component</h1></div>'
- });
+// delimiter needed to be added since there would be a conflict with the template syntax of Django
 var app = new Vue({ 
     el: '#app',
     delimiters: ['${', '}'],
@@ -14,7 +12,7 @@ var app = new Vue({
     },
     watch: {
         stockname: function (oldname, newname) {
-            this.page_number =1;
+            this.page_number =1; // if stock name updated we should start at pagenumber 1
             this.debouncedgetStock(oldname);
         },
         page_number: function(oldval, newval){
@@ -29,23 +27,43 @@ var app = new Vue({
     },
     methods:{
           getStock: async function(stock){
-            // if not an empty string we return the searched for value
+            // if not an empty string for stockname we return the searched for value
             // in case of empty string we return the whole dataset
+
+            var re = new RegExp("^([a-z0-9]*)$");
+
+            // handles if pagenumber decreased beyond zero
             if(this.page_number <= 0){
                 this.page_number = 1;
             }
+            // handles if pagenumber incremented beyond totalpage count
             if(this.page_number > this.total_page_count){
                 this.page_number = this.total_page_count;
             }
             this.loading=true;
             if(stock){
+                if(!re.test(stock)){
+                    // stock names cannot have special character so returning to null
+                    // avoids a ton of issues by handling here
+                    this.message=[]
+                    return ;
+                }
+                // url for api call that returns the search result
+                // the result is paginated and can be accessed by the page parameter in url
                 url = "http://127.0.0.1:8000/api/"+stock+"?page="+this.page_number;
+
+                // url to download the search result as a zip
                 downloadUrl = "/api/downloads/"+stock;
             }else{
+                // same steps as above repated for entire dataset
                 url = "http://127.0.0.1:8000/api/stonks?page="+this.page_number;
                 downloadUrl = "/api/downloads/";
             }
+
+            // updating the download url as the one obtained above - can it be updated directly?
             document.getElementById("downloadhref").href = downloadUrl;
+
+            // api headers added - the type need to be defined here
             const response = await fetch(url,{
                 method:'GET',
                 headers: {
@@ -53,12 +71,11 @@ var app = new Vue({
                     "Content-Type": "application/json"
                 },
             });
+            // updating various values with input from 
             var jsondata = await response.json();
-            console.log(jsondata)
             this.message = jsondata.results;
             this.total_page_count = jsondata.total_pages;
             this.loading=false;
-            // console.log(this.message);
           }
       }
 });
