@@ -30,7 +30,11 @@ var app = new Vue({
             // if not an empty string for stockname we return the searched for value
             // in case of empty string we return the whole dataset
 
+            // regex to check if input stockname is valid
             var re = new RegExp("^([a-z0-9]*)$");
+
+            // handling everything in lowercase
+            stock = stock.toLowerCase();
 
             // handles if pagenumber decreased beyond zero
             if(this.page_number <= 0){
@@ -44,7 +48,7 @@ var app = new Vue({
             if(stock){
                 if(!re.test(stock)){
                     // stock names cannot have special character so returning to null
-                    // avoids a ton of issues by handling here
+                    // this avoids a ton of issues by handling here
                     this.message=[]
                     return ;
                 }
