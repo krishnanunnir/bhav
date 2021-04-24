@@ -21,6 +21,11 @@
       <a href="api/downloads/" id="downloadhref" class="button is-dark">Download as Zip</a>
     </div>
   </div>
+  <div class="columns is-centered" v-if="lastdate">
+    <div class="column is-three-fifths">
+    <em>Last updated on ${ lastdate }</em>
+    </div>
+  </div>
   <br>
   <div class="columns is-centered" v-if="message.length">
     <div class="column is-three-fifths">

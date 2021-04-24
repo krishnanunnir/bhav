@@ -8,7 +8,8 @@ var app = new Vue({
         message: null,
         total_page_count: 1,
         page_number: 1,
-        loading: false
+        loading: false,
+        lastdate:''
     },
     watch: {
         stockname: function (oldname, newname) {
@@ -79,6 +80,7 @@ var app = new Vue({
             var jsondata = await response.json();
             this.message = jsondata.results;
             this.total_page_count = jsondata.total_pages;
+            this.lastdate = jsondata.updated_on;
             this.loading=false;
           }
       }

@@ -1,7 +1,7 @@
 from django.conf import settings
 from rest_framework import pagination
 from rest_framework.response import Response
-
+from django.core.cache import cache
 
 class PageNumberCountPagination(pagination.PageNumberPagination):
 
@@ -12,5 +12,6 @@ class PageNumberCountPagination(pagination.PageNumberPagination):
             'count': self.page.paginator.count,
             'page_numer': self.page.number,
             'total_pages': self.page.paginator.num_pages,
-            'results': data
+            'updated_on': cache.get("latest"),
+            'results': data,
         })

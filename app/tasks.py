@@ -66,6 +66,8 @@ def writeCSVToCache(today = datetime.date.today()):
     try:
         dict_equity = getCSVContentForDate(today)
         logger.info(f"Successfuly retrived bhavcopy for {today}")
+        cache.clear()
+        cache.set('latest', today)
         for row in dict_equity:
             data = {
                 "code": row['SC_CODE'],
