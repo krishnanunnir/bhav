@@ -10,17 +10,14 @@ var app = new Vue({
         message: null,
         total_page_count: 1,
         page_number: 1,
-        temp_page_number: 1,
     },
     watch: {
         stockname: function (oldname, newname) {
             this.page_number =1;
-            this.temp_page_number =1;
             this.debouncedgetStock(oldname);
         },
-        temp_page_number: function(oldval, newval){
-            console.log(oldval, newval);
-            this.getStock(this.stockname, oldval);
+        page_number: function(oldval, newval){
+            this.debouncedgetStock(this.stockname);
         }
 
     },
@@ -33,15 +30,17 @@ var app = new Vue({
           getStock: async function(stock){
             // if not an empty string we return the searched for value
             // in case of empty string we return the whole dataset
-            if(this.temp_page_number <= 0){
-                this.temp_page_number = 1;
-                return;
+            if(this.page_number <= 0){
+                this.page_number = 1;
+            }
+            if(this.page_number > this.total_page_count){
+                this.page_number = this.total_page_count;
             }
             if(stock){
-                url = "http://127.0.0.1:8000/api/"+stock+"?page="+this.temp_page_number;
+                url = "http://127.0.0.1:8000/api/"+stock+"?page="+this.page_number;
                 downloadUrl = "/api/downloads/"+stock;
             }else{
-                url = "http://127.0.0.1:8000/api/stonks?page="+this.temp_page_number;
+                url = "http://127.0.0.1:8000/api/stonks?page="+this.page_number;
                 downloadUrl = "/api/downloads/";
             }
             document.getElementById("downloadhref").href = downloadUrl;
@@ -55,7 +54,6 @@ var app = new Vue({
             var jsondata = await response.json();
             console.log(jsondata)
             this.message = jsondata.results;
-            this.page_number = this.temp_page_number;
             this.total_page_count = jsondata.total_pages;
             // console.log(this.message);
           }

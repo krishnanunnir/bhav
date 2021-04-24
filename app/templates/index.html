@@ -26,8 +26,8 @@
   <div class="columns is-centered" v-if="message.length">
     <div class="column is-three-fifths">
       <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-        <a class="pagination-previous" v-on:click="temp_page_number-=1" v-if="page_number!=1">Previous</a>
-        <a class="pagination-next" v-on:click="temp_page_number+=1" v-if="page_number!=total_page_count">Next page</a>
+        <a class="pagination-previous" v-on:click="page_number-=1" v-if="page_number!=1">Previous</a>
+        <a class="pagination-next" v-on:click="page_number+=1" v-if="page_number!=total_page_count">Next page</a>
         <ul class="pagination-list">
           <li><a class="pagination-link is-current" aria-current="page">${ page_number}</a></li>
         </ul>
