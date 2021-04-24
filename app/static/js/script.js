@@ -10,6 +10,7 @@ var app = new Vue({
         message: null,
         total_page_count: 1,
         page_number: 1,
+        loading: false
     },
     watch: {
         stockname: function (oldname, newname) {
@@ -36,6 +37,7 @@ var app = new Vue({
             if(this.page_number > this.total_page_count){
                 this.page_number = this.total_page_count;
             }
+            this.loading=true;
             if(stock){
                 url = "http://127.0.0.1:8000/api/"+stock+"?page="+this.page_number;
                 downloadUrl = "/api/downloads/"+stock;
@@ -55,6 +57,7 @@ var app = new Vue({
             console.log(jsondata)
             this.message = jsondata.results;
             this.total_page_count = jsondata.total_pages;
+            this.loading=false;
             // console.log(this.message);
           }
       }

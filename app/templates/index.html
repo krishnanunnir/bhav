@@ -29,7 +29,11 @@
         <a class="pagination-previous" v-on:click="page_number-=1" v-if="page_number!=1">Previous</a>
         <a class="pagination-next" v-on:click="page_number+=1" v-if="page_number!=total_page_count">Next page</a>
         <ul class="pagination-list">
-          <li><a class="pagination-link is-current" aria-current="page">${ page_number}</a></li>
+          <li>
+            <a class="pagination-link is-current" aria-current="page" v-model="page_number">
+              ${ page_number} / ${total_page_count}
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -37,7 +41,9 @@
   <div class="columns is-centered">
     <div class="column is-three-fifths">
       <div id="result">
-        <table class="rwd-table" v-if="message.length">
+        <div v-if="message.length==0" >Couldn't find any matches</div>
+        <div v-else-if="loading"><img src="{% static 'images/loader.svg' %}" style="display:block;margin:auto;"></div>
+        <table class="rwd-table" v-else>
           <tr>
             <th>Code</th>
             <th>Name</th>
@@ -55,7 +61,6 @@
             <td data-th="Low">${ mess.low_value }</td>
           </tr>
         </table>
-        <div v-else>Couldn't find any matches</span>
 
         </div>
       </div>
