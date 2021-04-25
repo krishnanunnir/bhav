@@ -19,7 +19,8 @@ def stock_list(request):
         # keys are not ideal in very large caches
         # but our db at max contains 3000 records corresponding to equity csv
         stock_list =  cache.keys("*")
-        for stock in stock_list:
+        # excluding the latest value in cache which contains the last day it was updated
+        for stock in [x for x in stock_list if x!="latest"]:
             all_stocks+=[cache.get(stock)]
         result_page = paginator.paginate_queryset(all_stocks, request)
         serializer = EquitySerializer(result_page,many= True)
@@ -36,7 +37,7 @@ def stock_list_by_name(request, stockname):
         paginator.page_size = 200
         search_result = []
         search_key = cache.keys("*"+stockname.lower() +"*")
-        for key in search_key:
+        for key in [x for x in search_key if x!="latest"]:
             search_result+=[cache.get(key)]
         result_page = paginator.paginate_queryset(search_result, request)
         serializer = EquitySerializer(result_page,many= True)
