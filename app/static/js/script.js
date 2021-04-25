@@ -55,13 +55,13 @@ var app = new Vue({
                 }
                 // url for api call that returns the search result
                 // the result is paginated and can be accessed by the page parameter in url
-                url = "http://127.0.0.1:8000/api/search?stockname="+stock+"&page="+this.page_number;
+                url = "api/search?stockname="+stock+"&page="+this.page_number;
 
                 // url to download the search result as a zip
                 downloadUrl = "/api/downloads/"+stock;
             }else{
                 // same steps as above repated for entire dataset
-                url = "http://127.0.0.1:8000/api/stonks?page="+this.page_number;
+                url = "api/stonks?page="+this.page_number;
                 downloadUrl = "/api/downloads/";
             }
 
