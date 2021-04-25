@@ -18,7 +18,7 @@ appname.autodiscover_tasks()
 appname.conf.timezone='Asia/Kolkata'
 appname.conf.beat_schedule = {
     "Write csv to db everyday at 6pm": {
-        "task": "app.tasks.writeCSVToDB",  # <---- Name of task
-        "schedule": crontab(hour='01',minute='41')
+        "task": "app.tasks.writeCSVToCache",  # <---- Name of task
+        "schedule": crontab(hour='18',minute='00')
     },
 }
