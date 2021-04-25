@@ -5,4 +5,5 @@ from  . import views
 urlpatterns = [
     path('stonks', views.stock_list),
     path('search', views.stock_list_by_name),
+    path('load', views.load_data),
 ]

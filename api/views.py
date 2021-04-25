@@ -4,6 +4,7 @@ from django.core.cache import cache
 from .serializers import EquitySerializer
 from .Pagination import PageNumberCountPagination
 from rest_framework.decorators import api_view
+from app.tasks import writeCSVToCache
 
 @api_view(['GET'])
 def stock_list(request):
@@ -45,3 +46,13 @@ def stock_list_by_name(request):
         result_page = paginator.paginate_queryset(search_result, request)
         serializer = EquitySerializer(result_page,many= True)
         return paginator.get_paginated_response(serializer.data)
+
+def load_data(request):
+    """
+    Manually load todays data into the cache, this is a last term resort
+    """
+    writeCSVToCache()
+    api_result = {
+        "status": "Attempting a manual load",
+    }
+    return JsonResponse(api_result)
