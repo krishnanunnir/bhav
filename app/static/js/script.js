@@ -32,7 +32,7 @@ var app = new Vue({
             // in case of empty string we return the whole dataset
 
             // regex to check if input stockname is valid
-            var re = new RegExp("^([a-z0-9]*)$");
+            var re = new RegExp("^([a-z0-9 ]*)$");
 
             // handling everything in lowercase
             stock = stock.toLowerCase();
@@ -55,7 +55,7 @@ var app = new Vue({
                 }
                 // url for api call that returns the search result
                 // the result is paginated and can be accessed by the page parameter in url
-                url = "http://127.0.0.1:8000/api/"+stock+"?page="+this.page_number;
+                url = "http://127.0.0.1:8000/api/search?stockname="+stock+"&page="+this.page_number;
 
                 // url to download the search result as a zip
                 downloadUrl = "/api/downloads/"+stock;

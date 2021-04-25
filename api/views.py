@@ -29,11 +29,12 @@ def stock_list(request):
         return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET'])
-def stock_list_by_name(request, stockname):
+def stock_list_by_name(request):
     """
     API returning the all the stocks containing the stockname pattern
     """
     if request.method=="GET":
+        stockname = request.GET.get("stockname")
         paginator = PageNumberCountPagination()
         paginator.page_size = 200
         search_result = []
