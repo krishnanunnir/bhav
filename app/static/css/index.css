@@ -3,3 +3,11 @@
     width: 95%;
     background-color: #3273dc;
 }
+
+#title{
+    display: block;
+    margin-top: 1em;
+    font-size: 2em;
+    text-align: center;
+    letter-spacing: 0.2em;
+}
