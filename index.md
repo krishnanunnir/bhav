@@ -1,37 +1,42 @@
-## Welcome to GitHub Pages
+## Bhavcopy
 
-You can use the [editor on GitHub](https://github.com/krishnanunnir/bhavcopy/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+### Problem Statement
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Mandatory Django + Vue + CSV task
 
-### Markdown
+Description: BSE publishes a "Bhavcopy" (Equity) ZIP every day here: https://www.bseindia.com/markets/MarketInfo/BhavCopy.aspx
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Requirements:
+Write a standalone Python Django web app/server that:
 
-```markdown
-Syntax highlighted code block
+- Downloads the equity bhavcopy zip from the above page every day at 18:00 IST for the current date.
+- Extracts and parses the CSV file in it.
+- Writes the records into Redis with appropriate data structures (Fields: code, name, open, high, low, close).
+- Renders a simple VueJS frontend with a search box that allows the stored entries to be searched by name and renders a table of results and optionally downloads the results as CSV. Make this page look nice!
+- The search needs to be performed on the backend using Redis.
 
-# Header 1
-## Header 2
-### Header 3
+### Design Decisions
+<details>
+ <summary>Handling downloading from the website.</summary>
 
-- Bulleted
-- List
+a. The url can be extracted using a parsing library like beautiful soup.  
+b. The url has a standard format where the only variable in it is the day, by editing the vlaue of day we can obtain the bhavcopy for that day.  
 
-1. Numbered
-2. List
+Both of them suffer from the same problem of being at the mercy of the website, if the structure of the website changes, it will not be possible to parse the url. If the url changes then the donwloads will fail. I went with option b since it is easier to implement and will be easier to correct in case of changes.
+</details>  
 
-**Bold** and _Italic_ and `Code` text
+<details>
+ <summary>Scheduling</summary>
+I thought of using cron jobs for implementing scheduling.
 
-[Link](url) and ![Image](src)
-```
+But I wanted to familiarise myself with Celery and I felt it would be easier to integrate features like Cache and models in Django by using Celery over cron jobs. the learning curve to Celery is a bit steeper.
+</details>  
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
-### Jekyll Themes
+<details>
+ <summary>Pagination</summary>
+Pagination make sense in this context since we a lot of data without any order and sometimes it is not possible to keep track of it manually, breaking down the data into smaller chunks make it more manageable.  
+<br>
+Pagination is only one page forward and one page backward, since data is not ordered and we already provide search..
+</details>  
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/krishnanunnir/bhavcopy/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
