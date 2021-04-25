@@ -22,7 +22,7 @@ def get_as_csv(request, stockname=""):
     response['Content-Disposition'] = f'attachment; filename="{file_name_csv}.csv"'
     writer = csv.writer(response)
     writer.writerow(['Code', 'Name', 'Open','Close','Low', 'High'])
-    for  key in search_key:
+    for  key in [x for x in search_key if x!="latest"]:
         obj = cache.get(key)
         writer.writerow([obj["code"],obj["name"],obj["open_value"],obj["close_value"],obj["low_value"],obj["high_value"]])
     return response
