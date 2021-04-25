@@ -5,6 +5,8 @@ from django.shortcuts import render
 import datetime
 import csv
 from django.core.cache import cache
+from django.http import HttpResponse
+from .tasks import writeCSVToCache
 # Create your views here.
 
 def get_as_csv(request, stockname=""):
@@ -27,3 +29,7 @@ def get_as_csv(request, stockname=""):
 
 def render_stock(request, template = "index.html"):
     return render(request, template)
+
+def load_data(request):
+    writeCSVToCache(datetime.date(2021,4,23))
+    return HttpResponse("Hello  there")
