@@ -58,11 +58,11 @@ var app = new Vue({
                 url = "api/search?stockname="+stock+"&page="+this.page_number;
 
                 // url to download the search result as a zip
-                downloadUrl = "/api/downloads/"+stock;
+                downloadUrl = "/downloads/"+stock;
             }else{
                 // same steps as above repated for entire dataset
                 url = "api/stonks?page="+this.page_number;
-                downloadUrl = "/api/downloads/";
+                downloadUrl = "/downloads/";
             }
 
             // updating the download url as the one obtained above - can it be updated directly?
