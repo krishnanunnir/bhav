@@ -59,10 +59,11 @@ def writeCSVToDB():
         except Exception as ex:
             logger.error(f"Issue occured while retrierving the bhavcopy for  {today} :: {str(ex)}")
 @shared_task
-def writeCSVToCache(today = datetime.date.today()):
+def writeCSVToCache():
     """
     Imports the data from csv to Cache
     """
+    today = datetime.date.today()
     try:
         dict_equity = getCSVContentForDate(today)
         logger.info(f"Successfuly retrived bhavcopy for {today}")
